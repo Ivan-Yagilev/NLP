@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nlp-emotion
+spec:
+  selector:
+    matchLabels:
+      app: nlp-emotion
+  replicas: 6
+  template:
+    metadata:
+      labels:
+        app: nlp-emotion
+    spec:
+      containers:
+      - name: nlp-emotion
+        image: avdule/emotion
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nlp-emotion-service
+spec:
+  selector:
+    app: nlp-emotion
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nlp-nationality
+spec:
+  selector:
+    matchLabels:
+      app: nlp-nationality
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: nlp-nationality
+    spec:
+      containers:
+      - name: nlp-nationality
+        image: avdule/nationality
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nlp-nationality-service
+spec:
+  selector:
+    app: nlp-nationality
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080
+  type: LoadBalancer
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nlp-ingress
+spec:
+  rules:
+  - host: nlp.example.com
+    http:
+      paths:
+      - path: /emotion
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: nlp-emotion-service
+            port:
+              number: 80
+      - path: /nationality
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: nlp-nationality-service
+            port:
+              number: 80
+
