@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nlp-emotion
+  namespace: nlp
 spec:
   selector:
     matchLabels:
@@ -11,6 +12,7 @@ spec:
     metadata:
       labels:
         app: nlp-emotion
+      namespace: nlp
     spec:
       containers:
       - name: nlp-emotion
@@ -22,6 +24,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: nlp-emotion-service
+  namespace: nlp
 spec:
   selector:
     app: nlp-emotion
@@ -35,6 +38,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nlp-nationality
+  namespace: nlp
 spec:
   selector:
     matchLabels:
@@ -44,30 +48,33 @@ spec:
     metadata:
       labels:
         app: nlp-nationality
+      namespace: nlp
     spec:
       containers:
       - name: nlp-nationality
         image: avdule/nationality
         ports:
-        - containerPort: 8080
+        - containerPort: 8000
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: nlp-nationality-service
+  namespace: nlp
 spec:
   selector:
     app: nlp-nationality
   ports:
   - protocol: TCP
     port: 80
-    targetPort: 8080
+    targetPort: 8000
   type: LoadBalancer
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: nlp-ingress
+  namespace: nlp
 spec:
   rules:
   - host: nlp.example.com
