@@ -77,7 +77,7 @@
   <script>
     function sendNationalityRequest() {
       const surname = document.getElementById("surnameInput").value;
-      const url = `http://nlp-api.ru/nationality/${surname}`;
+      const url = `http://nlp.api.com/nationality/${surname}`;
 
       fetch(url)
         .then(response => response.json())
@@ -91,7 +91,7 @@
 
     function sendEmotionRequest() {
       const text = document.getElementById("textInput").value;
-      const url = `http://nlp-api.ru/emotion/${text}`;
+      const url = `http://nlp.api.com/emotion/${text}`;
 
       fetch(url)
         .then(response => response.json())

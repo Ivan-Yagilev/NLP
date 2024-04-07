@@ -113,7 +113,7 @@ metadata:
   namespace: nlp
 spec:
   rules:
-  - host: nlp-api.ru
+  - host: nlp.api.com
     http:
       paths:
       - path: /emotion
