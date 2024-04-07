@@ -1,9 +1,17 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from use import use_model
-from models import Input
 
 app = FastAPI()
 
-@app.get("/emotion")
-def emotion(input: Input):
-    return use_model(input.input_text)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["GET"],
+    allow_headers=["*"],
+)
+
+@app.get("/emotion/{text}")
+def emotion(text: str):
+    return use_model(text)

@@ -1,49 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NLP</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NLP API</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f8f8f8;
+      color: #333;
+    }
+    .left-content, .right-content {
+      margin: 10px;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+      background-color: #f0f0f0;
+    }
+    h1 {
+      margin-bottom: 20px;
+      color: #555;
+    }
+    input, button, textarea {
+      width: calc(100% - 24px);
+      margin: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      opacity: 0.8;
+    }
+    textarea {
+      margin-top: 10px;
+      resize: none;
+    }
+
+    /* Media Query for Responsive Design */
+    @media only screen and (min-width: 600px) {
+      body {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+      }
+      .left-content, .right-content {
+        flex: 1;
+        width: 45%;
+      }
+    }
+  </style>
 </head>
 <body>
-    <h1>NLP сервис</h1>
-    <div>
-        <label for="input1">Введите текст для анализа настроения:</label>
-        <input type="text" id="input1" name="input1">
-        <button onclick="sendRequest1()">Анализировать</button>
-        <br>
-        <label for="response1">Результат: </label>
-        <textarea id="response1" rows="4" cols="50" readonly></textarea>
-    </div>
-    <div>
-        <label for="input2">Введите фамилию для анализа национальности: </label>
-        <input type="text" id="input2" name="input2">
-        <button onclick="sendRequest2()">Анализировать</button>
-        <br>
-        <label for="response2">Результат:</label>
-        <textarea id="response2" rows="4" cols="50" readonly></textarea>
-    </div>
+  <div class="left-content">
+    <h1>Определение национальности</h1>
+    <input type="text" id="surnameInput" placeholder="Введите фамилию">
+    <button onclick="sendNationalityRequest()">Анализировать</button>
+    <h2>Информация о национальности:</h2>
+    <textarea id="nationalityResponseArea" rows="10" readonly></textarea>
+  </div>
+  
+  <div class="right-content">
+    <h1>Анализ эмоций</h1>
+    <input type="text" id="textInput" placeholder="Введите текст">
+    <button onclick="sendEmotionRequest()">Анализировать</button>
+    <h2>Результат анализа текста:</h2>
+    <textarea id="emotionResponseArea" rows="10" readonly></textarea>
+  </div>
 
-    <script>
-        function sendRequest1() {
-            var surname = document.getElementById("input1").value;
-            var url = "http://nlp.example.com/nationality"; // Замените URL на ваш curl-адрес
-            var command = 'curl -X GET -H "Content-Type: application/json" -d \'{"surname":"' + surname + '"}\' ' + url;
-            var response1 = executeCurlCommand(command);
-            document.getElementById("response1").value = response1;
-        }
+  <script>
+    function sendNationalityRequest() {
+      const surname = document.getElementById("surnameInput").value;
+      const url = `http://nlp-api.ru/nationality/${surname}`;
 
-        function sendRequest2() {
-            var surname = document.getElementById("input2").value;
-            var url = "http://nlp.example.com/nationality";
-            var command = 'curl -X GET -H "Content-Type: application/json" -d \'{"surname":"' + surname + '"}\' ' + url;
-            var response2 = returnCurl(command)
-            document.getElementById("response2").value = response2;
-        }
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById("nationalityResponseArea").value = JSON.stringify(data, null, 2);
+        })
+        .catch(error => {
+          document.getElementById("nationalityResponseArea").value = "Ошибка при получении информации.";
+        });
+    }
 
-        function returnCurl(command) {
-            return command
-        }
-    </script>
+    function sendEmotionRequest() {
+      const text = document.getElementById("textInput").value;
+      const url = `http://nlp-api.ru/emotion/${text}`;
+
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById("emotionResponseArea").value = JSON.stringify(data, null, 2);
+        })
+        .catch(error => {
+          document.getElementById("emotionResponseArea").value = "Ошибка при анализе эмоциональной окраски.";
+        });
+    }
+  </script>
 </body>
 </html>

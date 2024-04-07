@@ -1,5 +1,5 @@
-import transliterate
-import torch
+from transliterate import translit
+from torch import tensor, load
 import json
 from models import Output
 from argparse import Namespace
@@ -17,7 +17,7 @@ args = Namespace(
 
 def predict_nationality(surname, classifier, vectorizer):
     vectorized_surname = vectorizer.vectorize(surname)
-    vectorized_surname = torch.tensor(vectorized_surname).view(1, -1)
+    vectorized_surname = tensor(vectorized_surname).view(1, -1)
     result = classifier(vectorized_surname, apply_softmax=True)
 
     probability_values, indices = result.max(dim=1)
@@ -36,7 +36,7 @@ def predict(surnameKyrillic):
             surname += el
 
     try:
-        new_surname = transliterate.translit(surname, reversed=True)
+        new_surname = translit(surname, reversed=True)
     except:
         new_surname = surname
 
@@ -46,7 +46,7 @@ def predict(surnameKyrillic):
                                     hidden_dim=args.hidden_dim, 
                                     output_dim=len(vectorizer.nationality_vocab))
 
-    classifier.load_state_dict(torch.load(args.model_state_file))
+    classifier.load_state_dict(load(args.model_state_file))
     classifier.eval()
 
     classifier = classifier.to("cpu")

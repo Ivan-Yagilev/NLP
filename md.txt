@@ -1,0 +1,3 @@
+curl -X GET "http://localhost:8080/nationality/Smith"
+
+curl -X GET -H "Content-Type: application/json" -d '{"input_text":"Золотых"}' http://nlp.example.com/emotion

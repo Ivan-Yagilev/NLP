@@ -7,7 +7,7 @@ spec:
   selector:
     matchLabels:
       app: nlp-emotion
-  replicas: 6
+  replicas: 1
   template:
     metadata:
       labels:
@@ -43,7 +43,7 @@ spec:
   selector:
     matchLabels:
       app: nlp-nationality
-  replicas: 3
+  replicas: 1
   template:
     metadata:
       labels:
@@ -70,6 +70,42 @@ spec:
     targetPort: 8080
   type: LoadBalancer
 ---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nlp-front
+  namespace: nlp
+spec:
+  selector:
+    matchLabels:
+      app: nlp-front
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nlp-front
+      namespace: nlp
+    spec:
+      containers:
+      - name: nlp-front
+        image: avdule/static
+        ports:
+        - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nlp-front-service
+  namespace: nlp
+spec:
+  selector:
+    app: nlp-front
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 3000
+  type: LoadBalancer
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -77,7 +113,7 @@ metadata:
   namespace: nlp
 spec:
   rules:
-  - host: nlp.example.com
+  - host: nlp-api.ru
     http:
       paths:
       - path: /emotion
@@ -94,4 +130,10 @@ spec:
             name: nlp-nationality-service
             port:
               number: 80
-
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nlp-front-service
+            port:
+              number: 80
