@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NLP</title>
+</head>
+<body>
+    <h1>NLP сервис</h1>
+    <div>
+        <label for="input1">Введите текст для анализа настроения:</label>
+        <input type="text" id="input1" name="input1">
+        <button onclick="sendRequest1()">Анализировать</button>
+        <br>
+        <label for="response1">Результат: </label>
+        <textarea id="response1" rows="4" cols="50" readonly></textarea>
+    </div>
+    <div>
+        <label for="input2">Введите фамилию для анализа национальности: </label>
+        <input type="text" id="input2" name="input2">
+        <button onclick="sendRequest2()">Анализировать</button>
+        <br>
+        <label for="response2">Результат:</label>
+        <textarea id="response2" rows="4" cols="50" readonly></textarea>
+    </div>
+
+    <script>
+        function sendRequest1() {
+            var surname = document.getElementById("input1").value;
+            var url = "http://nlp.example.com/nationality"; // Замените URL на ваш curl-адрес
+            var command = 'curl -X GET -H "Content-Type: application/json" -d \'{"surname":"' + surname + '"}\' ' + url;
+            var response1 = executeCurlCommand(command);
+            document.getElementById("response1").value = response1;
+        }
+
+        function sendRequest2() {
+            var surname = document.getElementById("input2").value;
+            var url = "http://nlp.example.com/nationality";
+            var command = 'curl -X GET -H "Content-Type: application/json" -d \'{"surname":"' + surname + '"}\' ' + url;
+            var response2 = returnCurl(command)
+            document.getElementById("response2").value = response2;
+        }
+
+        function returnCurl(command) {
+            return command
+        }
+    </script>
+</body>
+</html>
