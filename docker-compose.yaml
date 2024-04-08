@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  nationality:
+    image: avdule/nationality
+    ports:
+      - "82:8080"
+    restart: always
+
+  emotion:
+    image: avdule/emotion
+    ports:
+      - "81:8080"
+    restart: always

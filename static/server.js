@@ -22,5 +22,5 @@ const server = http.createServer((req, res) => {
 
 // Запуск сервера на порту 3000
 server.listen(3000, () => {
-  console.log('Сервер запущен на http://localhost:3000/');
+  console.log('Сервер запущен');
 });
